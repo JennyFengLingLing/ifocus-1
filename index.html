@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>js简单图片轮播切换</title>
+		<link type="text/css" rel="stylesheet" href="css/ifocus-1.css" />
+		<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				var currentIndex = 0;
+				var DEMO; 
+				var currentID = 0; //取得鼠标下方的对象ID
+				var pictureID = 0; //索引ID
+				$("#ifocus_piclist li").eq(0).show(); //默认显示第一张图片
+				autoScroll();//调用自动滚动函数
+				$("#ifocus_btn li").hover(function() {
+					StopScrolll();//当鼠标移动到对象上面的时候停止自动滚动
+					$("#ifocus_btn li").removeClass("current");
+					$("#ifocus_btn li").addClass("normal"); //所有的li去掉当前的样式加上正常的样式
+					$(this).removeClass("normal");
+					$(this).addClass("current"); //而本身则加上当前的样式去掉正常的样式
+					currentID = $(this).attr("id"); //取当前元素的ID
+					pictureID = currentID.substring(currentID.length - 1); //取最后一个字符
+					$("#ifocus_piclist li").hide();//隐藏所有大图片
+					$("#ifocus_piclist li").eq(pictureID).fadeIn("slow"); //本身对应大图片显示
+					$("#ifocus_tx li").hide();//隐藏所有的文字说明
+					$("#ifocus_tx li").eq(pictureID).show();//本身对应文字说明显示
+				}, function() {
+					//当鼠标离开对象的时候获得当前的对象的ID以便能在启动自动时与其同步
+					currentID = $(this).attr("id"); 
+					pictureID = currentID.substring(currentID.length - 1); 
+					currentIndex = pictureID;
+					autoScroll();
+				});
+				//自动滚动
+				function autoScroll() {
+					$("#ifocus_btn li:last").removeClass("current");
+					$("#ifocus_btn li:last").addClass("normal");
+					$("#ifocus_tx li:last").hide();
+					$("#ifocus_btn li").eq(currentIndex).removeClass("normal");
+					$("#ifocus_btn li").eq(currentIndex).addClass("current");
+					$("#ifocus_btn li").eq(currentIndex - 1).removeClass("current");
+					$("#ifocus_btn li").eq(currentIndex - 1).addClass("normal");
+					$("#ifocus_tx li").eq(currentIndex).show();
+					$("#ifocus_tx li").eq(currentIndex - 1).hide();
+					$("#ifocus_piclist li").eq(currentIndex).fadeIn("slow");
+					$("#ifocus_piclist li").eq(currentIndex - 1).hide();
+					currentIndex++;
+					currentIndex = currentIndex >= 4 ? 0 : currentIndex;
+					DEMO = setTimeout(autoScroll, 2000);
+				}
+				//停止自动滚动
+				function StopScrolll() { 
+					clearTimeout(DEMO);
+				}
+			});
+		</script>
+	</head>
+
+	<body>
+		<div id="ifocus">
+			<div id="ifocus_pic">
+				<div id="ifocus_piclist" style="left:0; top:0;">
+					<ul>
+						<li>
+							<a href="#"><img src="img/01.jpg" alt="" /></a>
+						</li>
+						<li>
+							<a href="#"><img src="img/02.jpg" alt="" /></a>
+						</li>
+						<li>
+							<a href="#"><img src="img/03.jpg" alt="" /></a>
+						</li>
+						<li>
+							<a href="#"><img src="img/04.jpg" alt="" /></a>
+						</li>
+					</ul>
+				</div>
+				<div id="ifocus_opdiv"></div>
+				<div id="ifocus_tx">
+					<ul>
+						<li class="current">忧伤在我心中沉静下来，宛如降临在寂静山林中的夜色</li>
+						<li class="normal">我就像一只停泊在海滩上的小船，聆听着晚潮奏</li>
+						<li class="normal">生命是上天赋予的，我们惟有献出生命，才能真正得到它</li>
+						<li class="normal">今天大地在阳光下向我细语，用一种已被遗忘的语言</li>
+					</ul>
+				</div>
+			</div>
+			<div id="ifocus_btn">
+				<ul>
+					<li id="p0" class="current"><img src="img/btn_01.jpg" alt="" /></li>
+					<li id="p1" class="normal"><img src="img/btn_02.jpg" alt="" /></li>
+					<li id="p2" class="normal"><img src="img/btn_03.jpg" alt="" /></li>
+					<li id="p3" class="normal"><img src="img/btn_04.jpg" alt="" /></li>
+				</ul>
+			</div>
+		</div>
+	</body>
+
+</html>
